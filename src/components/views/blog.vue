@@ -145,7 +145,7 @@
                             "
                         >
                             <aside class="widget widget_search">
-                                <form class="search-form">
+                                <div class="search-form">
                                     <label>
                                         <span class="screen-reader-text"
                                             >Search for:</span
@@ -154,15 +154,16 @@
                                             class="search-field"
                                             type="text"
                                             name="search"
+                                            v-model="searchValue"
                                             placeholder="What are you looking for ?"
                                         />
                                     </label>
                                     <button
                                         class="search-submit"
-                                        type="button"
-                                        id="submitSearch"
+                                        @click="getList"
+                                        @keyup.enter="getList"
                                     ></button>
-                                </form>
+                                </div>
                             </aside>
                             <aside class="widget widget_categories">
                                 <h3 class="widget-title">文章分类</h3>
@@ -249,6 +250,7 @@ export default {
         return {
             listMostPopular: [],
             categoryList: [],
+            searchValue:'',
             currentCate: {},
             currentPage: 1,
             limit: 8,
@@ -261,6 +263,7 @@ export default {
             this.$http
                 .post("/api/lesson/article/list", {
                     lessonCategoryId: this.currentCate.id,
+                    name:this.searchValue,
                     limit: this.limit,
                     page: this.currentPage,
                 })

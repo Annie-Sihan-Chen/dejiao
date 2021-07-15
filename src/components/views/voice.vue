@@ -36,7 +36,7 @@
                             "
                         >
                             <aside class="widget widget_search">
-                                <form class="search-form">
+                                <div class="search-form">
                                     <label>
                                         <span class="screen-reader-text"
                                             >Search for:</span
@@ -45,15 +45,16 @@
                                             class="search-field"
                                             type="text"
                                             name="search"
+                                            v-model="searchValue"
                                             placeholder="What are you looking for ?"
                                         />
                                     </label>
                                     <input
                                         class="search-submit"
-                                        type="submit"
-                                        value="Search"
+                                        @click="getList"
+                                        @keyup.enter="getList"
                                     />
-                                </form>
+                                </div>
                             </aside>
                             <aside class="widget widget_categories">
                                 <h3 class="widget-title">德教音频类别</h3>
@@ -276,6 +277,7 @@ export default {
             categoryList: [],
             currentCate: {},
             currentPage: 1,
+            searchValue:'',
             limit: 8,
             pages: [],
             list: [],
@@ -287,6 +289,7 @@ export default {
                 .post("/api/lesson/audio/list", {
                     lessonCategoryId: this.currentCate.id,
                     limit: this.limit,
+                    name:this.searchValue,
                     page: this.currentPage,
                 })
                 .then((response) => {
